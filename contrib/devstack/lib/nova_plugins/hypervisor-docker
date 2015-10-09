@@ -106,11 +106,11 @@ function start_nova_hypervisor {
     sudo cp $DOCKER_DIR/etc/nova/rootwrap.d/docker.filters  /etc/nova/rootwrap.d/docker.filters
 
     echo "Checking default image for docker..."
-    if ! (glance image-show "$DEFAULT_IMAGE_NAME"); then
+    if ! (glance --os-image-api-version 1 image-show "$DEFAULT_IMAGE_NAME"); then
         echo "Pulling $DOCKER_IMAGE_NAME..."
         docker pull $DOCKER_IMAGE_NAME
         echo "Saving $DOCKER_IMAGE_NAME to glance..."
-        docker save $DOCKER_IMAGE_NAME | glance image-create --is-public=True --container-format=docker --disk-format=raw --name $DEFAULT_IMAGE_NAME
+        docker save $DOCKER_IMAGE_NAME | glance --os-image-api-version 1 image-create --is-public=True --container-format=docker --disk-format=raw --name $DEFAULT_IMAGE_NAME
     fi
 }
 
